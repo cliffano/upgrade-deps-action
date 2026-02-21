@@ -3,5 +3,7 @@
   "enabledManagers": ["pip_requirements"],
   "pip_requirements": {
     "fileMatch": ["^requirements\\.txt$"]
-  }
+  },
+  "baseBranchPatterns": ["main"],
+  "rebaseWhen": "conflicted"
 }
