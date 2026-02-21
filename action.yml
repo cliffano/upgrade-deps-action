@@ -39,17 +39,10 @@ runs:
     - name: Run Renovate
       shell: bash
       run: >-
-        WORK_DIR="$(mktemp -d)";
-        rsync -a --exclude '.git' "$GITHUB_WORKSPACE/" "$WORK_DIR/";
-        cd "$WORK_DIR";
         renovate
-        --platform=local
-        --dry-run=null
-        --persist-repo-data=false
-        --repository-cache=reset
-        --require-config=optional
-        --onboarding=false;
-        cp "$WORK_DIR/requirements.txt" "$GITHUB_WORKSPACE/requirements.txt"
+          --platform=local
+          --require-config=ignored
+          --onboarding=false
       env:
         LOG_LEVEL: debug
     - name: Check upgraded dependencies
