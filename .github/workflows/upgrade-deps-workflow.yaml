@@ -1,0 +1,10 @@
+---
+name: Upgrade Deps
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: cliffano/upgrade-deps-action@main
+        with:
+          github_token: ${{ secrets.STUDIO_GITHUB_TOKEN }}

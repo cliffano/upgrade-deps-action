@@ -1,0 +1,56 @@
+---
+name: 'Studio Upgrade Deps GitHub Action'
+description: |
+  GitHub Action for upgrading dependencies using Renovate.
+author: 'Cliffano Subagio'
+branding:
+  icon: 'zap'
+  color: 'black'
+inputs:
+  github_token:
+    description: GitHub token
+    type: string
+    required: true
+  git_user_name:
+    description: Git user name
+    type: string
+    required: false
+    default: pakkunbot
+  git_user_email:
+    description: Git user email
+    type: string
+    required: false
+    default: blah+pakkun@cliffano.com
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code from the current repository
+      uses: actions/checkout@v5
+      with:
+        token: ${{ inputs.github_token }}
+        set-safe-directory: ${{ github.workspace }}
+    - name: Setup node.js, needed to run Renovate
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+    - name: Install Renovate
+      shell: bash
+      run: npm install -g renovate@43.19.0
+    - name: Run Renovate
+      shell: bash
+      run: >-
+        renovate
+        --platform=local
+        --dry-run=null
+        --persist-repo-data=false
+        --repository-cache=reset
+      env:
+        LOG_LEVEL: debug
+    - name: Check upgraded dependencies
+      shell: bash
+      run: make ci
+    - name: Save upgraded dependencies
+      uses: cliffano/save-changes-action@v1.0.0
+      with:
+        message: 'Upgrade dependencies'
+        github_token: ${{ inputs.github_token }}
